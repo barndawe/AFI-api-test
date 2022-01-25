@@ -1,6 +1,5 @@
 # AFI-api-test
 
-##Introduction
 This API has been written as a response to a coding test specification.
 The methodologies and frameworks chosen are (intentionally) overkill for an API with a single endpoint, but were chosen to show understanding of the following:
 
