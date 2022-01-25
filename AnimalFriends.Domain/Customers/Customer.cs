@@ -1,4 +1,5 @@
 using AnimalFriends.Domain.Common;
+using AnimalFriends.Domain.Exceptions;
 using FluentValidation;
 
 namespace AnimalFriends.Domain.Customers;
@@ -37,7 +38,10 @@ public class Customer : IValidatable
     {
         var validator = new CustomerValidator();
 
-        validator.ValidateAndThrow(this);
+        if (!validator.Validate(this).IsValid)
+        {
+            throw new DomainValidationException($"{nameof(Customer)} is not valid");
+        }
     }
 
     public class CustomerValidator : AbstractValidator<Customer>
@@ -62,8 +66,7 @@ public class Customer : IValidatable
             //email must be at least 4 alpha-numeric chars, then @, then at least 2 alphanumeric chars
             //then .co.uk or .com if specified
             RuleFor(c => c.Email)
-                .Matches(@"^[a-zA-Z0-9]{4,}\@[a-zA-Z0-9]{2,}(\.co\.uk|\.com)$")
-                .When(c => !string.IsNullOrWhiteSpace(c.Email));
+                .Matches(@"^[a-zA-Z0-9]{4,}\@[a-zA-Z0-9]{2,}(\.co\.uk|\.com)$");
         }
     }
 }

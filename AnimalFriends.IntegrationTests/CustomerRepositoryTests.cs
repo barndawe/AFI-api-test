@@ -27,7 +27,7 @@ public class CustomerRepositoryTests : IClassFixture<WebApplicationFactory<Progr
     [Fact]
     public async Task Can_add_new_customer_with_valid_data_no_email()
     {
-         var scope = _context.Services.CreateScope();
+        var scope = _context.Services.CreateScope();
         
         var repo = scope.ServiceProvider.GetService<ICustomerRepository>();
 
@@ -88,7 +88,7 @@ public class CustomerRepositoryTests : IClassFixture<WebApplicationFactory<Progr
     }
     
     [Fact]
-    public async Task Cannot_add_customer_with_valid_but_too_long_email_expect_()
+    public async Task Cannot_add_customer_with_valid_but_too_long_email_expect_DbUpdateException()
     {
         var scope = _context.Services.CreateScope();
         

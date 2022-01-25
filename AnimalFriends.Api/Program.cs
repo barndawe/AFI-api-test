@@ -1,17 +1,43 @@
+using System.Reflection;
+using AnimalFriends.Api.ExceptionHandling;
+using AnimalFriends.Application.Commands;
 using AnimalFriends.Domain.Common;
 using AnimalFriends.Domain.Customers;
 using AnimalFriends.Sql;
 using AnimalFriends.Sql.Customers;
+using FluentValidation.AspNetCore;
+using MediatR;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<DomainExceptionFilter>();
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Animal Friends API",
+        Description = "A demonstration of a simple async API",
+        Contact = new OpenApiContact
+        {
+            Name = "Olly Dawe",
+            Email = "barndawe@gmail.com"
+        }
+    });
+    
+    options.EnableAnnotations();
+});
 
 //add the DB
 builder.Services.AddDbContext<AnimalFriendsDbContext>(
@@ -21,6 +47,14 @@ builder.Services.AddDbContext<AnimalFriendsDbContext>(
 builder.Services
     .AddScoped<IUnitOfWork, SqlUnitOfWork>()
     .AddScoped<ICustomerRepository, CustomerRepository>();
+
+//Mediatr, AutoMapper, and Fluent validation
+builder.Services.AddMediatR(typeof(Program), typeof(CreateCustomerCommand));
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
+
+//show fluent validations in Swagger
+builder.Services.AddFluentValidationRulesToSwagger();
 
 var app = builder.Build();
 

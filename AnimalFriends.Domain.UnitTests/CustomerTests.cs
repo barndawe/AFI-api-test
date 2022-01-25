@@ -1,5 +1,6 @@
 using System;
 using AnimalFriends.Domain.Customers;
+using AnimalFriends.Domain.Exceptions;
 using FluentValidation;
 using Xunit;
 
@@ -55,7 +56,7 @@ public class CustomerTests
             new DateTime(1970, 01, 01),
             "fake@email.com");
 
-        Assert.Throws<ValidationException>(sut);
+        Assert.Throws<DomainValidationException>(sut);
     }
 
     [Theory]
@@ -75,7 +76,7 @@ public class CustomerTests
             new DateTime(1970, 01, 01),
             "fake@email.com");
 
-        Assert.Throws<ValidationException>(sut);
+        Assert.Throws<DomainValidationException>(sut);
     }
 
     [Fact]
@@ -87,7 +88,7 @@ public class CustomerTests
             null,
             null);
 
-        Assert.Throws<ValidationException>(sut);
+        Assert.Throws<DomainValidationException>(sut);
     }
 
     [Theory]
@@ -101,7 +102,7 @@ public class CustomerTests
             DateTime.Now.AddYears(-17),
             passValidEmail ? "fake@email.com" : null);
 
-        Assert.Throws<ValidationException>(sut);
+        Assert.Throws<DomainValidationException>(sut);
     }
 
 
@@ -120,6 +121,6 @@ public class CustomerTests
             passValidDoB ? new DateTime(1970,1,1) : null,
             email);
 
-        Assert.Throws<ValidationException>(sut);
+        Assert.Throws<DomainValidationException>(sut);
     }
 }
