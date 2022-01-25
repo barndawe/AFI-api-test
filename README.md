@@ -16,7 +16,7 @@ The methodologies and frameworks chosen are (intentionally) overkill for an API 
 
 This was written using the Rider IDE, but has also been tested in Visual Studio 2022 to ensure the tests pass. Storage is provided by Windows LocalDB.
 
-Further improvements that could be made to make this API 'production ready':~~~~
+Further improvements that could be made to make this API 'production ready':
 
 - Adding authentication - perhaps using OAuth2 and a suitable provider
 - Adding a permission model and restricting access to the endpoint
